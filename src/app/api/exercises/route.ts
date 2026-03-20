@@ -14,7 +14,7 @@ export async function GET() {
       where: { studentId: user.id },
       select: { classId: true },
     });
-    const classIds = memberOf.map((m) => m.classId);
+    const classIds = memberOf.map((m: any) => m.classId);
     whereClause = { classId: { in: classIds } };
   } else if (user.role === "TEACHER") {
     whereClause = { createdBy: user.id };
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    const exercise = await prisma.$transaction(async (tx) => {
+    const exercise = await prisma.$transaction(async (tx: any) => {
       const ex = await tx.exercise.create({
         data: {
           title,

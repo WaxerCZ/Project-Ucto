@@ -9,18 +9,14 @@ export default async function DashboardPage() {
 
   const user = session.user;
   const role = (user as { role?: string }).role;
-  const isTeacher = role === "TEACHER" || role === "ADMIN";
+  const isTeacher = role === "TEACHER";
 
   const [workspaceCount, submissionCount, exerciseCount] = await Promise.all([
     prisma.workspace.count({ where: { userId: user.id } }),
-    role === "ADMIN"
-      ? prisma.submission.count()
-      : prisma.submission.count({ where: { studentId: user.id } }),
-    role === "ADMIN"
-      ? prisma.exercise.count()
-      : role === "TEACHER"
-        ? prisma.exercise.count({ where: { createdBy: user.id } })
-        : prisma.exercise.count(),
+    prisma.submission.count({ where: { studentId: user.id } }),
+    role === "TEACHER"
+      ? prisma.exercise.count({ where: { createdBy: user.id } })
+      : prisma.exercise.count(),
   ]);
 
   return (
@@ -35,13 +31,13 @@ export default async function DashboardPage() {
           color="accent"
         />
         <DashboardCard
-          title={role === "ADMIN" ? "Všechna cvičení" : isTeacher ? "Moje cvičení" : "Dostupná cvičení"}
+          title={isTeacher ? "Moje cvičení" : "Dostupná cvičení"}
           count={exerciseCount}
           href="/exercises"
           color="success"
         />
         <DashboardCard
-          title={role === "ADMIN" ? "Všechna odevzdání" : "Odevzdání"}
+          title="Odevzdání"
           count={submissionCount}
           href="/submissions"
           color="warning"
@@ -72,14 +68,6 @@ export default async function DashboardPage() {
             >
               Procházet cvičení
             </Link>
-            {role === "ADMIN" && (
-              <Link
-                href="/admin"
-                className="block px-4 py-3 bg-danger-light text-danger rounded-md hover:bg-red-100 transition-colors text-sm font-medium"
-              >
-                Administrace
-              </Link>
-            )}
             {isTeacher && (
               <Link
                 href="/classes"

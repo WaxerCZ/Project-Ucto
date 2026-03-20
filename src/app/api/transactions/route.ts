@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create transaction and entries atomically
-    const transaction = await prisma.$transaction(async (tx) => {
+    const transaction = await prisma.$transaction(async (tx: any) => {
       const txn = await tx.transaction.create({
         data: {
           workspaceId,

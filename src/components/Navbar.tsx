@@ -12,7 +12,6 @@ export function Navbar() {
 
   const role = (session.user as { role?: string })?.role;
   const isTeacher = role === "TEACHER";
-  const isAdmin = role === "ADMIN";
 
   const navLinks = [
     { href: "/dashboard", label: "Přehled", icon: "⊞" },
@@ -20,7 +19,6 @@ export function Navbar() {
     { href: "/exercises", label: "Cvičení", icon: "✎" },
     { href: "/submissions", label: "Odevzdání", icon: "✓" },
     ...(isTeacher ? [{ href: "/classes", label: "Třídy", icon: "👥" }] : []),
-    ...(isAdmin ? [{ href: "/admin", label: "Admin", icon: "⚙" }] : []),
   ];
 
   const roleBadge = {

@@ -40,7 +40,7 @@ export async function GET(
   } else if (user.role === "TEACHER") {
     if (cls.teacherId !== user.id) return forbidden();
   } else {
-    const isMember = cls.members.some((m) => m.studentId === user.id);
+    const isMember = cls.members.some((m: any) => m.studentId === user.id);
     if (!isMember) return forbidden();
   }
 
